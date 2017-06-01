@@ -25,15 +25,17 @@ Sub StringMatch()
     '朴素算法
     Dim shotArr() As Integer
     shotArr = naiveStringMatch(strString, strCheck)
-    printResult strString, strCheck, shotArr
+    printResult strString, strCheck, shotArr, "朴素算法"
     '=====================================
     
     
     '=====================================
     'RabinKarp算法
-    shotArr = RabinKarpMatch(strString, strCheck)
-    printResult strString, strCheck, shotArr
+    shotArr = rabinKarpMatch(strString, strCheck)
+    printResult strString, strCheck, shotArr, "RabinKarp算法"
     '=====================================
+    
+    printPreAndPostfix (strString)
 End Sub
 '朴素算法
 Function naiveStringMatch(strString As String, _
@@ -72,7 +74,7 @@ Function naiveStringMatch(strString As String, _
     naiveStringMatch = shotArr
 End Function
 'RabinKarp算法
-Function RabinKarpMatch(strString As String, _
+Function rabinKarpMatch(strString As String, _
                         strCheck As String)
     lenCheck = Len(strCheck)
     lenString = Len(strString)
@@ -102,7 +104,7 @@ Function RabinKarpMatch(strString As String, _
             Next j
         End If
     Next i
-    RabinKarpMatch = shotArr
+    rabinKarpMatch = shotArr
 End Function
 '模仿hash函数,其实就是计算一个字符串输入的所有字符的ASCII的值的和
 Function Hash(strInput)
@@ -116,7 +118,8 @@ End Function
 '输出结果的方法
 Function printResult(strString As String, _
                      strCheck As String, _
-                     shotArr() As Integer)
+                     shotArr() As Integer, _
+                     strTitle As String)
     lenCheck = Len(strCheck)
     lenString = Len(strString)
     
@@ -136,9 +139,25 @@ Function printResult(strString As String, _
     Next i
     '补充最后的字符串
     strResult = strResult & Mid(strString, start, lenString - Len(strResult))
-    MsgBox strString & Chr(10) & strResult, vbInformation, "提示"
+    MsgBox strString & Chr(10) & strResult, vbInformation, strTitle
     Debug.Print strString
     Debug.Print strResult
+End Function
+'输出一个字符串的前缀和后缀
+'便于调试
+Function printPreAndPostfix(strString As String)
+    Dim prefix As String
+    Dim postfix As String
+    
+    For i = 1 To Len(strString) - 1
+        prefix = prefix & " " & Mid(strString, 1, i)
+        '下面这个是逆序的输出
+        'postfix = postfix & " " & Mid(strString, Len(strString) - i + 1, i)
+        postfix = postfix & " " & Mid(strString, i + 1, Len(strString) - i)
+    Next i
+    Debug.Print prefix
+    Debug.Print postfix
+    MsgBox "前缀:" & prefix & Chr(10) & "后缀:" & postfix, vbInformation, "前后缀"
 End Function
                      
 
