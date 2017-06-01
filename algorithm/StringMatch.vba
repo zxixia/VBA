@@ -19,9 +19,21 @@ Sub StringMatch()
     End If
     '=====================================
     Debug.Print strString & Chr(10) & strCheck
+    
+    
+    '=====================================
+    '朴素算法
     Dim shotArr() As Integer
     shotArr = naiveStringMatch(strString, strCheck)
     printResult strString, strCheck, shotArr
+    '=====================================
+    
+    
+    '=====================================
+    'RabinKarp算法
+    shotArr = RabinKarpMatch(strString, strCheck)
+    printResult strString, strCheck, shotArr
+    '=====================================
 End Sub
 '朴素算法
 Function naiveStringMatch(strString As String, _
@@ -59,7 +71,49 @@ Function naiveStringMatch(strString As String, _
     Next i
     naiveStringMatch = shotArr
 End Function
+'RabinKarp算法
+Function RabinKarpMatch(strString As String, _
+                        strCheck As String)
+    lenCheck = Len(strCheck)
+    lenString = Len(strString)
+    Debug.Print strString & " " & Hash(strString)
+    Debug.Print strCheck & " " & Hash(strCheck)
+    
+    '一个用来存放检索到的index的数组
+    Dim shotArr(1 To 10) As Integer
+    Dim shotCount
+    shotCount = 1
+    
+    hashCheck = Hash(strCheck)
+    For i = 1 To (lenString - lenCheck + 1)
+        toCheck = Mid(strString, i, lenCheck)
+        If Hash(toCheck) = hashCheck Then
+            For j = 1 To lenCheck
+                If Mid(toCheck, j, 1) <> Mid(strCheck, j, 1) Then
+                    '如果两个字符串有一点不一样,跳出循环
+                    Exit For
+                End If
+                If j = lenCheck Then
+                    '找到子串
+                    'MsgBox i, vbInformation, "提示"
+                    shotArr(shotCount) = i
+                    shotCount = shotCount + 1
+                End If
+            Next j
+        End If
+    Next i
+    RabinKarpMatch = shotArr
+End Function
+'模仿hash函数,其实就是计算一个字符串输入的所有字符的ASCII的值的和
+Function Hash(strInput)
+    Dim count As Integer
+    For i = 1 To Len(strInput)
+        count = count + Asc(Mid(strInput, i, 1))
+    Next i
+    Hash = count
+End Function
 
+'输出结果的方法
 Function printResult(strString As String, _
                      strCheck As String, _
                      shotArr() As Integer)
@@ -75,7 +129,7 @@ Function printResult(strString As String, _
             Exit For
         End If
         Debug.Print i
-        If start < i Then
+        If start <= i Then
             strResult = strResult & Mid(strString, start, i - Len(strResult) - 1) & UCase(strCheck)
         End If
         start = i + lenCheck
