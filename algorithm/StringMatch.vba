@@ -9,7 +9,7 @@ Sub StringMatch()
     
     '=====================================
     '输入要查找的字符串
-     strCheck = InputBox("请输入", "请输入待查找的字符串", 1)
+    strCheck = InputBox("请输入", "请输入待查找的字符串", "ab")
     
     If strCheck <> "" Then
      MsgBox "在" & Chr(10) & strString & Chr(10) & "中查找：" & Chr(10) & strCheck, vbInformation, "提示"
@@ -37,8 +37,16 @@ Sub StringMatch()
     
     printPreAndPostfix (strString)
     
+    '=====================================
+    'KMP算法
     printRecursiveGetNext ("abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfabcd")
     printGetNext ("abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfabcd")
+    
+    strCheck = InputBox("请输入", "请输入KMP字符串", "abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfabcd")
+    printRecursiveGetNext (strCheck)
+    printGetNext (strCheck)
+    '=====================================
+    
 End Sub
 '朴素算法
 Function naiveStringMatch(strString As String, _
@@ -435,11 +443,14 @@ End Function
 Function printRecursiveGetNext(strString As String)
     lenStr = Len(strString)
     Dim i As Integer
+    Debug.Print
+    Debug.Print "========== 递归算法 =========="
     For i = 1 To lenStr
         Dim strTemp As String
         strTemp = Mid(strString, 1, i)
         Debug.Print strTemp & ", " & RecursiveGetNext(strTemp, i)
     Next i
+    Debug.Print "========== 递归算法 =========="
 End Function
 
 '=============================================
@@ -536,12 +547,14 @@ Function printGetNext(strString As String)
     Dim NextArray() As Integer
     ReDim NextArray(1 To lenStr)
     NextArray = GetNext(strString)
-    
+    Debug.Print
+    Debug.Print "========== 非递归算法 =========="
     For i = 1 To lenStr
         Dim strTemp As String
         strTemp = Mid(strString, 1, i)
         Debug.Print strTemp & ", " & NextArray(i)
     Next i
+    Debug.Print "========== 非递归算法 =========="
 End Function
 
 
