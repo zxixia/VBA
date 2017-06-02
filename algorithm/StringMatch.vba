@@ -36,6 +36,8 @@ Sub StringMatch()
     '=====================================
     
     printPreAndPostfix (strString)
+    
+    Debug.Print RecursiveGetNext("abcdqwfabcZZabcdqwfabcd", 23)
 End Sub
 '朴素算法
 Function naiveStringMatch(strString As String, _
@@ -56,20 +58,20 @@ Function naiveStringMatch(strString As String, _
     For i = 1 To (lenString - lenCheck + 1)
         '调试输出中间结果,Mid函数要从1开始
         'Debug.Print Mid(strString, i + 1, 1)
-        For j = 1 To lenCheck
+        For J = 1 To lenCheck
             strA = Mid(strString, i, lenCheck)
             'Debug.Print strA & " "; Mid(strCheck, j, 1)
-            If Mid(strA, j, 1) <> Mid(strCheck, j, 1) Then
+            If Mid(strA, J, 1) <> Mid(strCheck, J, 1) Then
                 '如果两个字符串有一点不一样,跳出循环
                 Exit For
             End If
-            If j = lenCheck Then
+            If J = lenCheck Then
                 '找到子串
                 'MsgBox i, vbInformation, "提示"
                 shotArr(shotCount) = i
                 shotCount = shotCount + 1
             End If
-        Next j
+        Next J
     Next i
     naiveStringMatch = shotArr
 End Function
@@ -90,18 +92,18 @@ Function rabinKarpMatch(strString As String, _
     For i = 1 To (lenString - lenCheck + 1)
         toCheck = Mid(strString, i, lenCheck)
         If Hash(toCheck) = hashCheck Then
-            For j = 1 To lenCheck
-                If Mid(toCheck, j, 1) <> Mid(strCheck, j, 1) Then
+            For J = 1 To lenCheck
+                If Mid(toCheck, J, 1) <> Mid(strCheck, J, 1) Then
                     '如果两个字符串有一点不一样,跳出循环
                     Exit For
                 End If
-                If j = lenCheck Then
+                If J = lenCheck Then
                     '找到子串
                     'MsgBox i, vbInformation, "提示"
                     shotArr(shotCount) = i
                     shotCount = shotCount + 1
                 End If
-            Next j
+            Next J
         End If
     Next i
     rabinKarpMatch = shotArr
@@ -322,6 +324,10 @@ End Function
 '  直到找到一个k1,
 '  满足 n[k1+1] = n[j+1], 此时Next(N[j+1]) = Next(N[k1]) + 1, 参考前面的图示理解
 '
+' =============================================================================================
+'
+'
+' 这个很适合使用递归的方式求解这个Next数组
 '
 '
 '
@@ -332,17 +338,43 @@ End Function
 '
 '
 '
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-
+Function RecursiveGetNext(strN As String, _
+                          intJ As Integer)
+    If intJ <= 1 Then
+        '参考前面的注释
+        '这是递归中止的条件
+        '比如只有一个字符的"a"
+        '其Next肯定为0
+        RecursiveGetNext = 0
+    Else
+        '计算N[j-1]的模式值
+        'Next(N[j-1])
+        Dim i As Integer
+        i = RecursiveGetNext(strN, intJ - 1)
+        If Mid(strN, i + 1, 1) = Mid(strN, intJ, 1) Then
+            '对应于n[j+1] = n[i+1]
+            '则Next(N[j+1]) = Next(N[j]) + 1
+            RecursiveGetNext = i + 1
+        Else
+            Dim k As Integer
+            k = RecursiveGetNext(strN, i)
+            Do While k > 0 And Mid(strN, k + 1, 1) <> Mid(strN, intJ, 1)
+                k = RecursiveGetNext(strN, k)
+            Loop
+            
+            If k > 0 Then
+                If Mid(strN, k + 1, 1) = Mid(strN, intJ, 1) Then
+                    RecursiveGetNext = k + 1
+                Else
+                    RecursiveGetNext = 0
+                End If
+            Else
+                RecursiveGetNext = 0
+            End If
+        End If
+    End If
+    
+End Function
 
 
                      
