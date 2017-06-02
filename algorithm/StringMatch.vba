@@ -37,7 +37,7 @@ Sub StringMatch()
     
     printPreAndPostfix (strString)
     
-    printRecursiveGetNext ("abcdqwfabcZZabcdqwfabcd")
+    printRecursiveGetNext ("abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfabcd")
 End Sub
 '朴素算法
 Function naiveStringMatch(strString As String, _
@@ -332,11 +332,62 @@ End Function
 '
 '
 '
+' ===================================================
+' 有bug
+'
+' 如下计算的值有误
+' abcdqwfabcZZabcdqwfabcda, 0
 '
 '
+' a, 0
+' ab, 0
+' abc, 0
+' abcd, 0
+' abcdq, 0
+' abcdqw, 0
+' abcdqwf, 0
+' abcdqwfa, 1
+' abcdqwfab, 2
+' abcdqwfabc, 3
+' abcdqwfabcZ, 0
+' abcdqwfabcZZ, 0
+' abcdqwfabcZZa, 1
+' abcdqwfabcZZab, 2
+' abcdqwfabcZZabc, 3
+' abcdqwfabcZZabcd, 4
+' abcdqwfabcZZabcdq, 5
+' abcdqwfabcZZabcdqw, 6
+' abcdqwfabcZZabcdqwf, 7
+' abcdqwfabcZZabcdqwfa, 8
+' abcdqwfabcZZabcdqwfab, 9
+' abcdqwfabcZZabcdqwfabc, 10
+' abcdqwfabcZZabcdqwfabcd, 4
+' abcdqwfabcZZabcdqwfabcda, 0
+' abcdqwfabcZZabcdqwfabcdab, 0
+' abcdqwfabcZZabcdqwfabcdabc, 0
+' abcdqwfabcZZabcdqwfabcdabcd, 0
+' abcdqwfabcZZabcdqwfabcdabcdq, 0
+' abcdqwfabcZZabcdqwfabcdabcdqw, 0
+' abcdqwfabcZZabcdqwfabcdabcdqwf, 0
+' abcdqwfabcZZabcdqwfabcdabcdqwfa, 1
+' abcdqwfabcZZabcdqwfabcdabcdqwfab, 2
+' abcdqwfabcZZabcdqwfabcdabcdqwfabc, 3
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZ, 0
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZ, 0
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZa, 1
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZab, 2
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabc, 3
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcd, 4
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdq, 5
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqw, 6
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwf, 7
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfa, 8
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfab, 9
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfabc, 10
+' abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfabcd, 4
 '
 '
-'
+' ===================================================
 '
 Function RecursiveGetNext(strN As String, _
                           intJ As Integer)
@@ -361,22 +412,25 @@ Function RecursiveGetNext(strN As String, _
             Do While k > 0 And Mid(strN, k + 1, 1) <> Mid(strN, intJ, 1)
                 k = RecursiveGetNext(strN, k)
             Loop
-            
-            If k > 0 Then
+            '
+            '参考上面的错误的输出
+            '理解为什么这里不需要判断k的值
+            'If k > 0 Then
                 If Mid(strN, k + 1, 1) = Mid(strN, intJ, 1) Then
                     RecursiveGetNext = k + 1
                 Else
                     RecursiveGetNext = 0
                 End If
-            Else
-                RecursiveGetNext = 0
-            End If
+            'Else
+                'RecursiveGetNext = 0
+            'End If
         End If
     End If
     
 End Function
 
 '=============================================
+'递归函数的打印帮助方法
 Function printRecursiveGetNext(strString As String)
     lenStr = Len(strString)
     Dim i As Integer
