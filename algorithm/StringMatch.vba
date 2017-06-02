@@ -38,6 +38,7 @@ Sub StringMatch()
     printPreAndPostfix (strString)
     
     printRecursiveGetNext ("abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfabcd")
+    printGetNext ("abcdqwfabcZZabcdqwfabcdabcdqwfabcZZabcdqwfabcd")
 End Sub
 '朴素算法
 Function naiveStringMatch(strString As String, _
@@ -196,7 +197,7 @@ End Function
 
 
 ' 假设已知字符串N[j]的模式值,Next(N[j]) = i
-' 下面将分【3】种情况来讨论如何求解字符串N[j+1]的模式值,Next(N[j+1])的值
+' 下面将分【2】种情况来讨论如何求解字符串N[j+1]的模式值,Next(N[j+1])的值
 
 ' 【1】,
 '  n[j+1] == n[i+1]的情况
@@ -441,11 +442,107 @@ Function printRecursiveGetNext(strString As String)
     Next i
 End Function
 
+'=============================================
+'非递归的计算Next数组
+Function GetNext(strString As String)
+    lenStr = Len(strString)
+    ' 用于存放计算出来的Next值的数组
+    Dim NextArray() As Integer
+    ReDim NextArray(1 To lenStr)
+    '第一位肯定是0
+    NextArray(1) = 0
+    
+    For J = 2 To lenStr
+        ' Next(N[j-1])的值
+        i = NextArray(J - 1)
+        If Mid(strString, i + 1, 1) = Mid(strString, J, 1) Then
+            NextArray(J) = i + 1
+        Else
+            If i > 0 Then
+                ' i大于0
+                ' 表示当前存在一个可以划分的模式值
+                '
+                '
+                ' a, 0                         j=1
+                ' ab, 0                        j=2
+                ' abc, 0                       j=3
+                ' abcd, 0                      j=4
+                ' abcdq, 0                     j=5
+                ' abcdqw, 0                    j=6
+                ' abcdqwf, 0                   j=7
+                ' abcdqwfa, 1                  j=8
+                ' abcdqwfab, 2                 j=9
+                ' abcdqwfabc, 3                j=10
+                ' abcdqwfabcZ, 0               j=11
+                ' abcdqwfabcZZ, 0              j=12
+                ' abcdqwfabcZZa, 1             j=13
+                ' abcdqwfabcZZab, 2            j=14
+                ' abcdqwfabcZZabc, 3           j=15
+                ' abcdqwfabcZZabcd, 4          j=16
+                ' abcdqwfabcZZabcdq, 5         j=17
+                ' abcdqwfabcZZabcdqw, 6        j=18
+                ' abcdqwfabcZZabcdqwf, 7       j=19
+                ' abcdqwfabcZZabcdqwfa, 8      j=20
+                ' abcdqwfabcZZabcdqwfab, 9     j=21
+                ' abcdqwfabcZZabcdqwfabc, 10   j=22
+                ' abcdqwfabcZZabcdqwfabcd, 4   j=23
+                ' abcdqwfabcZZabcdqwfabcda, 1  j=24
+                '
+                '
+                ' 看上面的输出,
+                ' 假设当前
+                '         j=23,
+                ' 则      j-1=22
+                ' 对应的    i=10
+                '
+                ' 那么NextArray(i=10)中存放的就是
+                '
+                '
+                ' N[22]
+                '
+                ' abcdqwfabcZZabcdqwfabc
+                ' 123456789*************
+                ' |        0123456789***
+                ' |        |  |      012
+                ' |        |  |        |
+                ' ----------  ----------
+                '     a            b
+                '
+                ' 上面的a部分对应的Next(N[10])的值！！！！！
+                '
+                '
+                k = NextArray(i)
+                Do While k > 0 And Mid(strString, k + 1, 1) <> Mid(strString, J, 1)
+                    k = NextArray(k)
+                Loop
+                
+                If Mid(strString, k + 1, 1) = Mid(strString, J, 1) Then
+                    NextArray(J) = k + 1
+                Else
+                    NextArray(J) = 0
+                End If
+                
+            Else
+            End If
+        End If
+    Next J
+    GetNext = NextArray
+End Function
 
-
-
-
-
+'=============================================
+'非递归函数的打印帮助方法
+Function printGetNext(strString As String)
+    lenStr = Len(strString)
+    Dim NextArray() As Integer
+    ReDim NextArray(1 To lenStr)
+    NextArray = GetNext(strString)
+    
+    For i = 1 To lenStr
+        Dim strTemp As String
+        strTemp = Mid(strString, 1, i)
+        Debug.Print strTemp & ", " & NextArray(i)
+    Next i
+End Function
 
 
 
