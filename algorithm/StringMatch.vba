@@ -37,7 +37,7 @@ Sub StringMatch()
     
     printPreAndPostfix (strString)
     
-    Debug.Print RecursiveGetNext("abcdqwfabcZZabcdqwfabcd", 23)
+    printRecursiveGetNext ("abcdqwfabcZZabcdqwfabcd")
 End Sub
 '∆”ÀÿÀ„∑®
 Function naiveStringMatch(strString As String, _
@@ -375,6 +375,50 @@ Function RecursiveGetNext(strN As String, _
     End If
     
 End Function
+
+'=============================================
+Function printRecursiveGetNext(strString As String)
+    lenStr = Len(strString)
+    Dim i As Integer
+    For i = 1 To lenStr
+        Dim strTemp As String
+        strTemp = Mid(strString, 1, i)
+        Debug.Print strTemp & ", " & RecursiveGetNext(strTemp, i)
+    Next i
+End Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                      
