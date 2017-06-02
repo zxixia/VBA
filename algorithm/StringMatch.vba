@@ -159,5 +159,71 @@ Function printPreAndPostfix(strString As String)
     Debug.Print postfix
     MsgBox "前缀:" & prefix & Chr(10) & "后缀:" & postfix, vbInformation, "前后缀"
 End Function
+
+
+' 定义
+' a) N[j]          表示长度为j的字符串
+' b) n[0...(j-1)]  表示长度为j的字符串对应于0...(j-1)位处的具体取值
+' c) Next(N[j])    表示长度为j的字符串对应的模式值
+' =================================================================
+
+' 模式值数组的求取
+' 参考网页：http://www.ituring.com.cn/article/59881
+' N[4] = abca , Next(N[4]) =  0,  表示n[0] = n[3]
+' N[5] = abcab, Next(N[5]) =  1,  表示n[0] = n[4], n[1] = n[3]
+' N[3] = abc  , Next(N[3]) = -1,  表示没有首尾匹配
+
+
+' 假设已知字符串N[j]对应的模式值, Next(N(j)) = i,则其可视化表示如下图所示
+'
+' N[j] = abcdqwfabc
+'        0123456789
+'          i
+'
+' 由上图可知
+' j=10,  表示该字符串的长度
+' i=2,   表示该字符串最长模式匹配的前缀的最末位的坐标,也即表示
+'        n[0...i] == n[(j-1-i)...(j-1)]
+'        n[0] = n[7] = "a"
+'        n[1] = n[8] = "b"
+'        n[2] = n[9] = "c"
+'
+
+
+' 假设已知字符串N[j]的模式值,Next(N[j]) = i
+' 下面将分【3】种情况来讨论如何求解字符串N[j+1]的模式值,Next(N[j+1])的值
+
+' 【1】,
+'  n[j] == n[i+1]的情况
+'
+' 设字符串 N[11]="abcdqwfabcd"
+' 其子串   N[10]="abcdqwfabc", 且Next(N[10]) = 2 , 其j=10, 其i=2
+' 同时     (n[j] = n[10]) == (n[i+1] = n[3]) = "d"
+' 则推出   Next(N[11]) = Next(N[10]) + 1
+' 也即是
+' 如果     n[j] == n[i+1]
+' 则       Next(N[j+1]) = Next(N[10]) + 1
+'                       = i+1
+'
+'
+'
+' 【2】,
+' n[j] != n[i+1]的情况
+
+
+
+
+'假设字符串N[j]已经求出了next的值,next(N[j]) = i}，
+'如何求N[j+1]的next值,下面分3种情况进行讨论
+
+
+'1,
+'假设这个数组N[12]是"abcdqwerabcd",共有12个字符
+'则N[10]{对应的字符串是"abcdqwerab"}的next[10]=1,表示前缀"ab"和后缀"ab"
+
+
+
+
+
                      
 
