@@ -1,38 +1,18 @@
+' 全局变量
+' 记录当前步数
+Public StepCount As Integer
 Sub Enter()
+    StepCount = 1
 '汉诺塔
-    Dim iOne(4) As Integer
-    Dim iTwo(4) As Integer
-    Dim iThree(4) As Integer
-    iOne(1) = 0
-    iOne(2) = 0
-    iOne(3) = 3
-    iOne(4) = 4
-    
-    iTwo(1) = 0
-    iTwo(2) = 0
-    iTwo(3) = 1
-    iTwo(4) = 2
-    
-    iThree(1) = 0
-    iThree(2) = 0
-    iThree(3) = 0
-    iThree(4) = 0
-    'printHannnoi 1, 4, iOne, iTwo, iThree
-    
-    
     Dim t1() As Integer
     Dim t2() As Integer
     Dim t3() As Integer
-    InitHannoi 3, t1, t2, t3
-    printHannnoi 1, 3, t1, t2, t3
+    Dim num As Integer
+    '输入要查找的字符串
+    num = InputBox("请输入", "请输入汉诺塔的饼数", "3")
     
-    'Move t1, t2
-    'printHannnoi 2, 3, t1, t2, t3
-    
-    'Move t1, t2
-    'printHannnoi 3, 3, t1, t2, t3
-    
-    Hannoi 3, t1, t2, t3
+    InitHannoi num, t1, t2, t3
+    Hannoi num, t1, t2, t3
 End Sub
 
 '打印当前汉诺塔函数
@@ -251,28 +231,30 @@ Function printHelper(t1() As Integer, _
     t3Tag = t3(tagIndex)
     
     If t1Tag = 1 And t2Tag = 2 And t3Tag = 3 Then
-        printHannnoi 1, hannoiSize, t1, t2, t3
+        printHannnoi StepCount, hannoiSize, t1, t2, t3
     End If
     
     If t1Tag = 1 And t2Tag = 3 And t3Tag = 2 Then
-        printHannnoi 1, hannoiSize, t1, t3, t2
+        printHannnoi StepCount, hannoiSize, t1, t3, t2
     End If
     
     If t1Tag = 2 And t2Tag = 1 And t3Tag = 3 Then
-        printHannnoi 1, hannoiSize, t2, t1, t3
+        printHannnoi StepCount, hannoiSize, t2, t1, t3
     End If
     
     If t1Tag = 2 And t2Tag = 3 And t3Tag = 1 Then
-        printHannnoi 1, hannoiSize, t3, t1, t2
+        printHannnoi StepCount, hannoiSize, t3, t1, t2
     End If
     
     If t1Tag = 3 And t2Tag = 1 And t3Tag = 2 Then
-        printHannnoi 1, hannoiSize, t2, t3, t1
+        printHannnoi StepCount, hannoiSize, t2, t3, t1
     End If
     
     If t1Tag = 3 And t2Tag = 2 And t3Tag = 1 Then
-        printHannnoi 1, hannoiSize, t3, t2, t1
+        printHannnoi StepCount, hannoiSize, t3, t2, t1
     End If
+    
+    StepCount = StepCount + 1
 End Function
 '
 '
@@ -298,46 +280,3 @@ Function InitHannoi(size As Integer, _
       t3(i) = 0
    Next i
 End Function
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
-'
