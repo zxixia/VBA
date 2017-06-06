@@ -1,18 +1,23 @@
-Sub Hannoi()
+Sub Enter()
 '汉诺塔
-    Dim iOne(3) As Integer
-    Dim iTwo(3) As Integer
-    Dim iThree(3) As Integer
+    Dim iOne(4) As Integer
+    Dim iTwo(4) As Integer
+    Dim iThree(4) As Integer
     iOne(1) = 0
-    iOne(2) = 2
+    iOne(2) = 0
     iOne(3) = 3
+    iOne(4) = 4
+    
     iTwo(1) = 0
     iTwo(2) = 0
     iTwo(3) = 1
+    iTwo(4) = 2
+    
     iThree(1) = 0
-    iThree(2) = 1
-    iThree(3) = 3
-    printHannnoi 1, 3, iOne, iTwo, iThree
+    iThree(2) = 0
+    iThree(3) = 0
+    iThree(4) = 0
+    printHannnoi 1, 4, iOne, iTwo, iThree
 End Sub
 
 '打印当前汉诺塔函数
@@ -125,7 +130,64 @@ End Function
 
 '
 ' 汉诺塔递归构造函数
-Function Hannoi()
+'
+' 定义
+'               1   2   3
+'          饼  塔  塔  塔
+' 1，Hannoi(N, t1, t2, t3)，表示将N个饼借助于 t2，从 t1 移动到 t3
+'
+'
+'             F   T
+'            塔  塔
+' 2，Move(n, tF, tT)，表示将第n个饼从 tF 的塔顶移动到 tT 的塔顶
+'
+'
+' 假设有N个饼
+'
+' 1，Hannoi(N, t1, t2, t3)，表示将N个饼，借助于t2, 从t1 移动到 t3
+'
+' 2，把（N-1）个饼, 借助于 t3, 从 t1 移动到 t2
+'    Hannoi(N-1, t1, t3, t2)
+'
+' 3，把第n个饼从 t1 移动到 t3
+'    Move(n, t1, t3)
+'
+' 4，把（N-1）个饼, 借助于 t1, 从 t2 移动到 t3
+'    Hannoi(N-1, t2, t1, t3)
+'
+'
+' 假设只有一个饼
+'
+' 1，Move(1, t1, t3)，直接将该饼从t1 的塔顶,移动到 t3的塔顶即可
+'
+'
+' 基于上述推理，得到如下的递归伪代码
+'
+'
+' Hannoi(N, t1, t2, t3) {
+'   if N == 1 {
+'       Move(1, t1, t3);
+'   } else {
+'       Hannoi(N-1, t1, t3, t2);
+'       Move(n, t1, t3);
+'       Hannoi(N-1, t2, t1, t3);
+'   }
+' }
+'
+'
+'
+Function Hannoi(iStep As Integer, _
+                iHannoiCount As Integer, _
+                iOne() As Integer, _
+                iTwo() As Integer, _
+                iThree() As Integer)
+
+    
+End Function
+' 汉诺塔的移动
+Function moveHannoi(iNo As Integer, _
+                    iFrom As Integer, _
+                    iTo As Integer)
 
 End Function
 '
