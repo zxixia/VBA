@@ -23,9 +23,16 @@ Sub Enter()
     Dim t1() As Integer
     Dim t2() As Integer
     Dim t3() As Integer
-    InitHannoi 5, t1, t2, t3
-    printHannnoi 20, 5, t1, t2, t3
-    'Hannoi 5, t1, t2, t3
+    InitHannoi 3, t1, t2, t3
+    printHannnoi 1, 3, t1, t2, t3
+    
+    'Move t1, t2
+    'printHannnoi 2, 3, t1, t2, t3
+    
+    'Move t1, t2
+    'printHannnoi 3, 3, t1, t2, t3
+    
+    Hannoi 3, t1, t2, t3
 End Sub
 
 '打印当前汉诺塔函数
@@ -197,8 +204,10 @@ Function Hannoi(N As Integer, _
         printHelper t1, t2, t3
     Else
         Hannoi (N - 1), t1, t3, t2
+        
         Move t1, t3
         printHelper t1, t2, t3
+        
         Hannoi (N - 1), t2, t1, t3
     End If
 End Function
@@ -210,24 +219,24 @@ Function Move(tFrom() As Integer, _
  
   ' 塔的（N+1） 放的是1,2,3 使用来区分t1,t2,t3的关键
   arrayLen = UBound(tFrom) - 1
-  top = 0
+  Top = 0
   
   For i = 1 To arrayLen
     If tFrom(i) > 0 Then
-        top = tFrom(i)
+        Top = tFrom(i)
         tFrom(i) = 0
         Exit For
     End If
   Next i
   
-  
-  For i = arrayLen To 1
-    If tTo(i) = 0 Then
-        tTo(i) = top
+  For j = arrayLen To 1 Step -1
+    If tTo(j) < 1 Then
+        tTo(j) = Top
         Exit For
     End If
-  Next i
+  Next j
 End Function
+
 '
 ' 打印帮助类
 Function printHelper(t1() As Integer, _
@@ -285,6 +294,8 @@ Function InitHannoi(size As Integer, _
    
    For i = 1 To size
       t1(i) = i
+      t2(i) = 0
+      t3(i) = 0
    Next i
 End Function
 '
